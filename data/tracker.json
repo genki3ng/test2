@@ -1,0 +1,37 @@
+{
+  "companies": [
+    {
+      "name": "Northwind",
+      "slug": "northwind",
+      "careers": "https://example.com/northwind/careers",
+      "role": "Staff Data Scientist, Growth",
+      "tier": 1,
+      "status": "applied",
+      "perm": "🟢 sponsorship 友好（示例）",
+      "referral": "✅ Jordan Lee 内推已提交（示例）",
+      "next": "⏰06-30 等 recruiter 回复；3 天没动静 → 请 Jordan 轻追一句"
+    },
+    {
+      "name": "Vertex Cloud",
+      "slug": "vertex-cloud",
+      "careers": "https://example.com/vertex/careers",
+      "role": "Senior Data Scientist, Product Analytics",
+      "tier": 1,
+      "status": "recruiter",
+      "perm": "🟡 待核（示例）",
+      "referral": "🟢 recruiter Sam Patel inbound（示例）",
+      "next": "⏰07-02 recruiter screen（30min）；准备三必问：team / sponsorship / 级别+comp"
+    },
+    {
+      "name": "Helios Media",
+      "slug": "helios-media",
+      "careers": "https://example.com/helios/careers",
+      "role": "Data Scientist, Experimentation",
+      "tier": 2,
+      "status": "researching",
+      "perm": "🟢 友好（示例）",
+      "referral": "待找",
+      "next": "核实在招岗位 + 找内推渠道"
+    }
+  ]
+}

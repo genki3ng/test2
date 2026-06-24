@@ -1,0 +1,41 @@
+/* 1p3a 最新帖高亮 —— 列表行样式 */
+
+/* 强高亮：最近 N 天（默认 3 天）—— 左侧绿色粗边 + 淡绿背景 */
+tbody.l3a-recent {
+  background-color: #e9f9ee !important;
+  box-shadow: inset 4px 0 0 #1aab4b !important;
+}
+tbody.l3a-recent th a.xst,
+tbody.l3a-recent th a.s {
+  font-weight: 700 !important;
+}
+
+/* 弱高亮：最近一周（默认 7 天）—— 左侧黄色边 + 极淡黄背景 */
+tbody.l3a-week {
+  background-color: #fffae6 !important;
+  box-shadow: inset 4px 0 0 #f0c419 !important;
+}
+
+/* 变灰：不命中的帖子（可选） */
+tbody.l3a-dim {
+  opacity: 0.45 !important;
+}
+
+/* 标题旁的“N天前”徽章 */
+.l3a-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 6px;
+  font-size: 11px;
+  line-height: 16px;
+  border-radius: 8px;
+  color: #fff;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.l3a-badge-recent {
+  background-color: #1aab4b;
+}
+.l3a-badge-week {
+  background-color: #d9a400;
+}

@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "OfferOS Web Clipper",
+  "version": "0.7.0",
+  "description": "一键把任意网页的面经/JD/截图（右键/快捷键/弹窗）存到你的 OfferOS 仓库（inbox/），供 Claude 读取、打标签、归档。可选：在 1point3acres 论坛列表按时间高亮最近帖子。",
+  "permissions": ["storage", "activeTab", "scripting", "contextMenus"],
+  "host_permissions": [
+    "https://www.1point3acres.com/*",
+    "https://api.github.com/*"
+  ],
+  "background": { "service_worker": "background.js" },
+  "commands": {
+    "capture-fullpage": {
+      "suggested_key": { "default": "Alt+Shift+S" },
+      "description": "整页截图 + 正文 一键存到 inbox（默认按面经）"
+    }
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "OfferOS Web Clipper"
+  },
+  "content_scripts": [
+    {
+      "//": "可选模块：1point3acres 论坛列表「最近帖」高亮。只在该论坛注入，与通用收集互不影响；不需要可整段删掉（通用收集靠 activeTab，不依赖它）。",
+      "matches": [
+        "https://www.1point3acres.com/bbs/forum-*",
+        "https://www.1point3acres.com/bbs/forum.php*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

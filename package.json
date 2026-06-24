@@ -1,0 +1,25 @@
+{
+  "name": "offeros",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "check": "node tools/check-no-personal-info.mjs",
+    "build": "node tools/check-no-personal-info.mjs && node tools/build-resume-exports.mjs && next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "docx": "^9.0.0",
+    "marked": "^18.0.0",
+    "next": "^15.5.19",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "playwright": "^1.60.0",
+    "typescript": "^5"
+  }
+}

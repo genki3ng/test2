@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body {
+        font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+        width: 300px;
+        margin: 0;
+        padding: 12px 14px;
+        font-size: 13px;
+        color: #222;
+      }
+      h1 { font-size: 14px; margin: 0 0 8px; }
+      h2 { font-size: 12px; color: #555; margin: 14px 0 6px; text-transform: none; }
+      hr { border: none; border-top: 1px solid #eee; margin: 12px 0; }
+      .row { display: flex; align-items: center; justify-content: space-between; margin: 7px 0; }
+      .row label { flex: 1; }
+      input[type="number"] { width: 52px; }
+      input[type="text"], input[type="password"], textarea, select { box-sizing: border-box; }
+      textarea { width: 100%; height: 84px; resize: vertical; font-family: inherit; font-size: 12px; }
+      select { width: 120px; }
+      .types { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 2px 0 8px; }
+      .types label { display: inline-flex; align-items: center; gap: 3px; flex: none; cursor: pointer; }
+      .full { width: 100%; }
+      button { font-size: 12px; padding: 5px 8px; margin: 4px 4px 0 0; cursor: pointer; }
+      .primary { background: #1aab4b; color: #fff; border: 1px solid #169a43; border-radius: 4px; }
+      .src { color: #888; font-size: 11px; margin: 4px 0; word-break: break-all; }
+      .status { font-size: 11px; margin-top: 8px; min-height: 14px; }
+      .status.ok { color: #1aab4b; }
+      .status.err { color: #d33; }
+      .hint { color: #999; font-size: 11px; line-height: 1.5; margin-top: 6px; }
+      .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+      details { margin-top: 10px; }
+      summary { cursor: pointer; font-size: 12px; color: #555; }
+      details .row { margin: 6px 0; }
+      details label { width: 64px; flex: none; }
+      details input { flex: 1; margin-left: 8px; }
+    </style>
+  </head>
+  <body>
+    <h1>1p3a 高亮 + 收集</h1>
+
+    <!-- ============ 高亮 ============ -->
+    <h2>① 列表高亮</h2>
+    <div class="row">
+      <label for="enabled">启用高亮</label>
+      <input type="checkbox" id="enabled" />
+    </div>
+    <div class="row">
+      <label for="basis">基准时间</label>
+      <select id="basis">
+        <option value="start">发帖时间</option>
+        <option value="last">最后回复</option>
+      </select>
+    </div>
+    <div class="row">
+      <label for="recentDays"><span class="swatch" style="background:#1aab4b"></span>强高亮 ≤</label>
+      <span><input type="number" id="recentDays" min="0" step="1" /> 天</span>
+    </div>
+    <div class="row">
+      <label for="weekDays"><span class="swatch" style="background:#f0c419"></span>弱高亮 ≤</label>
+      <span><input type="number" id="weekDays" min="0" step="1" /> 天</span>
+    </div>
+    <div class="row">
+      <label for="showBadge">显示“N天前”徽章</label>
+      <input type="checkbox" id="showBadge" />
+    </div>
+    <div class="row">
+      <label for="dimOthers">其余帖子变灰</label>
+      <input type="checkbox" id="dimOthers" />
+    </div>
+
+    <hr />
+
+    <!-- ============ 收集 ============ -->
+    <h2>② 收集到 GitHub（供 Claude 读取）</h2>
+    <div class="src">
+      <a id="inboxLink" href="https://github.com/" target="_blank">📥 打开 inbox 文件夹（GitHub，核对捕获已入库）</a>
+    </div>
+    <div class="row"><label>类型</label></div>
+    <div class="types" id="types">
+      <label><input type="checkbox" value="mianjing" checked /> 面经</label>
+      <label><input type="checkbox" value="jd" /> JD/职位</label>
+      <label><input type="checkbox" value="visa" /> 签证/身份</label>
+      <label><input type="checkbox" value="other" /> 其他</label>
+    </div>
+    <textarea id="clipText" placeholder="① 在此粘贴文字（面经 / LinkedIn JD / 签证信息…）&#10;② 或直接粘贴图片（会作为截图一起存）&#10;③ 或点下面“抓取本页正文”自动填入"></textarea>
+    <div class="src" id="src">来源：（打开扩展时自动读取当前标签页）</div>
+    <div>
+      <button id="btnBoth" class="primary">⚡ 正文+整页 一键收集</button>
+    </div>
+    <div>
+      <button id="btnGrab">抓正文/选中</button>
+      <button id="btnShot">截整页</button>
+      <button id="btnShotView">仅可见区</button>
+      <button id="btnSave">保存上面内容</button>
+    </div>
+    <div class="status" id="clipStatus"></div>
+    <div class="hint">
+      ⚡ 一键收集在<b>后台</b>运行：点完可关弹窗；<b>滚动截图那几秒别切走标签页</b>，
+      切走会中断（图标 <b>!</b>）。图标 <b>…</b>=进行中，<b>✓</b>=已存，<b>!</b>=失败。<br />
+      ⌨️ 快捷键 <b>Alt+Shift+S</b> = 整页+正文直接存（默认按"面经"；改键见
+      chrome://extensions/shortcuts）。<br />
+      🖱️ 选中文字后<b>右键</b>也能直接收集（可选类型）。<br />
+      ✋ 手动三件套（抓正文/截图/保存）需<b>保持弹窗开着</b>直到显示 ✓。
+    </div>
+
+    <!-- ============ GitHub 设置 ============ -->
+    <details id="ghDetails">
+      <summary>GitHub 连接设置（首次必填）</summary>
+      <div class="row"><label>owner</label><input type="text" id="ghOwner" /></div>
+      <div class="row"><label>repo</label><input type="text" id="ghRepo" /></div>
+      <div class="row"><label>branch</label><input type="text" id="ghBranch" /></div>
+      <div class="row"><label>path</label><input type="text" id="ghPath" /></div>
+      <div class="row"><label>token</label><input type="password" id="ghToken" placeholder="fine-grained PAT" /></div>
+      <div>
+        <button id="btnSaveCfg">保存设置</button>
+        <button id="btnTest">测试连接</button>
+      </div>
+      <div class="status" id="cfgStatus"></div>
+      <div class="hint">
+        token 只存在本机浏览器（chrome.storage.local），不会写进仓库。<br />
+        建议用 fine-grained PAT，仅授权该仓库的 <b>Contents: Read and write</b>。
+      </div>
+    </details>
+
+    <div class="hint">改动即时生效；收集仅在普通网页可用（chrome:// 等系统页不行）。</div>
+
+    <script src="gh.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

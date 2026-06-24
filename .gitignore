@@ -1,0 +1,41 @@
+# macOS
+.DS_Store
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+
+# Logs / env
+*.log
+.env
+.env.local
+
+# Node
+node_modules/
+dist/
+build/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# 个人草稿 / 敏感临时文件（不入库）
+*.local.md
+*-private.*
+scratch/
+*.zip
+
+# 去标识化：个人真实标识名单（脚本从这里 / env DEID_DENYLIST 读取；绝不入库）
+tools/deid-denylist-private.json
+.deid-denylist-private.json
+
+# Next.js（求职指挥台网站）
+.next/
+out/
+.vercel
+next-env.d.ts
+*.tsbuildinfo
+public/exports/

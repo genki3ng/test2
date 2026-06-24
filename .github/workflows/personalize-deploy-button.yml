@@ -1,0 +1,34 @@
+name: Personalize deploy button
+
+# 用 "Use this template" 生成的下游仓库，首次 push 时自动把 README 里的一键部署
+# 按钮指向该仓库自己。模板仓库自身（is_template=true）会被跳过，因此仓库里始终
+# 保持中性占位 your-username/your-repo、不含任何作者标识。
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  personalize:
+    # 只在「从模板生成」的下游仓库运行；模板仓库自身跳过
+    if: ${{ github.event.repository.is_template == false }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Point the Vercel deploy button at this repository
+        env:
+          REPO: ${{ github.repository }}
+        run: |
+          sed -i -E "s#(repository-url=https://github\.com/)[^[:space:])&]+#\1${REPO}#g" README.md
+          if git diff --quiet -- README.md; then
+            echo "Deploy button already targets ${REPO}; nothing to do."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore: point deploy button at ${REPO} [skip ci]"
+          git push
